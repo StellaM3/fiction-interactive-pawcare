@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\StoryController;
 |
 */  use App\Http\Controllers\Api\ChapterController;
     use App\Http\Controllers\Api\ChoiceController;
+    use App\Http\Controllers\Api\StoryResultController;
 
     Route::get('api/stories', [StoryController::class, 'index']);
     Route::get('/api/chapters', [ChapterController::class, 'index']);
@@ -20,4 +21,9 @@ use App\Http\Controllers\Api\StoryController;
     Route::get('/api/choices', [ChoiceController::class, 'index']);
     Route::get('/', function () {
         return view('home');
+    
+        Route::get('/story1-result/{userId}', [StoryResultController::class, 'show']);
+            
     });
+
+    Route::get('/story1-result/{userId}', [StoryResultController::class, 'show']);

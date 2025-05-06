@@ -45,11 +45,11 @@ class StorySeeder extends Seeder
             'content' => "Avoir un animal demande du temps et de la présence. Combien de temps penses-tu pouvoir lui consacrer chaque jour ?",
         ]);
         
-        // Chapitre 5 (Conclusion)
+        // Chapitre 5 (nouveau)
         $chapter5 = Chapter::create([
             'story_id' => $story1->id,
-            'title' => 'Conclusion',
-            'content' => "Merci d’avoir pris le temps de répondre à ces questions ! Grâce à tes réponses, nous pourrons te proposer l’animal qui correspond le mieux à ton mode de vie et à tes envies. Prépare-toi à découvrir ton futur compagnon !",
+            'title' => 'Type d\'interaction souhaitée',
+            'content' => "En adoptant un animal, tu imagines plutôt passer ton temps à…",
         ]);
         
         // CHOICES
@@ -59,7 +59,7 @@ class StorySeeder extends Seeder
             'chapter_id' => $chapter1->id,
             'content' => 'Oui, je suis prêt(e) à trouver mon compagnon idéal !',
             'next_chapter_id' => $chapter2->id,
-            'score_type' => null, // pas d'influence directe ici
+            'score_type' => null,
         ]);
         
         Choice::create([
@@ -113,7 +113,80 @@ class StorySeeder extends Seeder
             'next_chapter_id' => $chapter5->id,
             'score_type' => 'chien',
         ]);
+        
+        // Chapitre 5 (dernier)
+        Choice::create([
+            'chapter_id' => $chapter5->id,
+            'content' => 'Avoir un compagnon indépendant qui aime son espace.',
+            'next_chapter_id' => null, // Fin : ici on déclenche l’analyse pour chat/chien
+            'score_type' => 'chat',
+        ]);
+        
+        Choice::create([
+            'chapter_id' => $chapter5->id,
+            'content' => 'Avoir un ami fidèle qui adore être près de toi et te suivre partout.',
+            'next_chapter_id' => null, // Fin
+            'score_type' => 'chien',
+        ]);
 
- 
+        
+        //STORY 2 : CHAT
+        $story2 = Story::create([
+            'title' => 'Ton premier mois avec ton chat',
+        ]);
+        
+        $chapter2_1 = Chapter::create([
+            'story_id' => $story2->id,
+            'title' => 'Découverte de ton chat',
+            'content' => "Ton choix est fait : tu repars du refuge avec un adorable petit chat. Timide mais curieux, il découvre son nouvel environnement avec prudence. Il renifle les coins de la maison, saute sur le canapé… et va se cacher sous la table. C’est le début d’une belle aventure. Que fais-tu pour l’accueillir au mieux ?",
+        ]);
+        
+        Choice::create([
+            'chapter_id' => $chapter2_1->id,
+            'content' => "Tu lui aménages un coin calme avec une couverture, de la nourriture et un jouet.",
+            'next_chapter_id' => null,
+            'impact_bonheur' => 2,
+            'impact_sante' => 1,
+            'impact_energie' => 1,
+        ]);
+        
+        Choice::create([
+            'chapter_id' => $chapter2_1->id,
+            'content' => "Tu le laisses explorer librement sans rien préparer de particulier.",
+            'next_chapter_id' => null,
+            'impact_bonheur' => 0,
+            'impact_sante' => 0,
+            'impact_energie' => 0,
+        ]);
+
+
+        //STORY 3 : CHIEN
+        $story3 = Story::create([
+            'title' => 'Ton premier mois avec ton chien',
+        ]);
+        
+        $chapter3_1 = Chapter::create([
+            'story_id' => $story3->id,
+            'title' => 'Découverte de ton chien',
+            'content' => "Bienvenue à la maison ! Ton nouveau compagnon canin arrive en remuant la queue, débordant d’énergie. Il court dans tous les sens, aboie joyeusement et renverse déjà une plante. Il a besoin de repères pour se sentir en sécurité. Que fais-tu en premier ?",
+        ]);
+        
+        Choice::create([
+            'chapter_id' => $chapter3_1->id,
+            'content' => "Tu le sors faire une balade calme pour l’aider à se dépenser et découvrir le quartier.",
+            'next_chapter_id' => null,
+            'impact_bonheur' => 1,
+            'impact_sante' => 2,
+            'impact_energie' => 2,
+        ]);
+        
+        Choice::create([
+            'chapter_id' => $chapter3_1->id,
+            'content' => "Tu le laisses seul un moment pour qu’il s’habitue à la maison par lui-même.",
+            'next_chapter_id' => null,
+            'impact_bonheur' => -1,
+            'impact_sante' => 0,
+            'impact_energie' => 0,
+        ]);
     }
 }

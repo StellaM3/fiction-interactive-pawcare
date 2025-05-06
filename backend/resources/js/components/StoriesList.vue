@@ -44,9 +44,32 @@ function startStory(story) {
 
 function selectChoice(choice) {
     if (!choice.next_chapter_id) {
-        alert("Fin de l'histoire 🎉");
-        currentChapter.value = null;
-        return;
+    console.log('Fin de Story 1, on va chercher le résultat...');
+
+    // 👉 APPEL vers le backend
+    fetch(`/story1-result/1`) // Remplace 1 par le vrai userId si besoin
+        .then(response => response.json())
+        .then(data => {
+            console.log('Résultat reçu:', data);
+            if (data.next_story_id) {
+                // Trouver la Story correspondante dans la liste des stories déjà chargées
+                const nextStory = stories.value.find(s => s.id === data.next_story_id);
+                if (nextStory) {
+                    alert(`Génial ! Tu continues avec : ${nextStory.title} 🎉`);
+                    startStory(nextStory); // Redémarre avec la nouvelle Story
+                } else {
+                    alert("La suite n'a pas été trouvée 😅");
+                }
+            } else {
+                alert("Fin de l'histoire 🎉");
+            }
+        })
+        .catch(error => {
+            console.error('Erreur lors de la récupération du résultat final:', error);
+            alert("Erreur pour récupérer le résultat final.");
+        });
+
+    return;
     }
 
     const nextChapter = currentStory.value.chapters.find(
