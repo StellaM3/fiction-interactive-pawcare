@@ -9,7 +9,11 @@ class Choice extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['chapter_id', 'content', 'next_chapter_id'];
+    protected $fillable = [
+        'chapter_id','content','next_chapter_id',
+        'score_type',          
+        'impact_bonheur','impact_sante','impact_energie'
+    ];
 
     public function chapter()
     {

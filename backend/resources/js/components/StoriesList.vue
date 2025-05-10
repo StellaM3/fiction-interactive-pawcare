@@ -14,77 +14,67 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import ChapterView from './ChapterView.vue'; // ✅ L'import doit être ici (pas dans le template)
+import ChapterView from './ChapterView.vue';
 
-const stories = ref([]);
-const currentStory = ref(null);
+const stories        = ref([]);
+const currentStory   = ref(null);
 const currentChapter = ref(null);
 
+// ➜ tableau local des ID de choix réellement cliqués
+const selectedChoices = ref([]);
+
 onMounted(async () => {
-    try {
-        const response = await fetch('/api/stories');
-        const data = await response.json();
-        console.log('Stories data:', data);
+    const res   = await fetch('/api/stories');
+    const data  = await res.json();          // JSON reçu depuis l’API
 
-        stories.value = data.data ?? data;
+    // Certaines implémentations renvoient { data:[…] }, d’autres renvoient directement un tableau.
+    stories.value = data.data ?? data;       // on gère les deux cas
 
-        if (stories.value.length > 0) {
-            // Directement démarrer la première histoire
-            startStory(stories.value[0]);
-        }
-    } catch (error) {
-        console.error('Erreur lors de la récupération des histoires :', error);
+    if (stories.value.length) {
+        startStory(stories.value[0]);        // démarre la première histoire
+    } else {
+        console.error('Aucune story trouvée 😱');
     }
 });
 
 function startStory(story) {
-    currentStory.value = story;
-    currentChapter.value = story.chapters[0]; // Commencer par le premier chapitre
+    currentStory.value   = story;
+    currentChapter.value = story.chapters[0];
+    selectedChoices.value = [];                // reset quand on redémarre
 }
 
-function selectChoice(choice) {
-    if (!choice.next_chapter_id) {
-    console.log('Fin de Story 1, on va chercher le résultat...');
+async function selectChoice(choice) {
 
-    // 👉 APPEL vers le backend
-    fetch(`/story1-result/1`) // Remplace 1 par le vrai userId si besoin
-        .then(response => response.json())
-        .then(data => {
-            console.log('Résultat reçu:', data);
-            if (data.next_story_id) {
-                // Trouver la Story correspondante dans la liste des stories déjà chargées
-                const nextStory = stories.value.find(s => s.id === data.next_story_id);
-                if (nextStory) {
-                    alert(`Génial ! Tu continues avec : ${nextStory.title} 🎉`);
-                    startStory(nextStory); // Redémarre avec la nouvelle Story
-                } else {
-                    alert("La suite n'a pas été trouvée 😅");
-                }
-            } else {
-                alert("Fin de l'histoire 🎉");
-            }
+    /* 1️⃣  POST le choix à l’API ------------------------------------ */
+    await fetch('/api/user-choices', {
+        method : 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body   : JSON.stringify({
+            choice_id : choice.id,
+            user_id   : 1            // provisoire : même ID que dans /story1-result/1
         })
-        .catch(error => {
-            console.error('Erreur lors de la récupération du résultat final:', error);
-            alert("Erreur pour récupérer le résultat final.");
-        });
+    });
+    selectedChoices.value.push(choice.id);
 
-    return;
+    /* 2️⃣  Navigation normale -------------------------------------- */
+    if (!choice.next_chapter_id) {
+        // story terminée ⇒ on demande le résultat
+        const r = await fetch('/story1-result/1');          // même user_id
+        const data = await r.json();
+
+        const next = stories.value.find(s => s.id === data.next_story_id);
+        if (next) startStory(next);
+        else alert('Story suivante introuvable');
+        return;
     }
 
-    const nextChapter = currentStory.value.chapters.find(
-        (chapter) => chapter.id === choice.next_chapter_id
-    );
+    const nextChapter = currentStory.value.chapters
+                       .find(c => c.id === choice.next_chapter_id);
 
-    if (nextChapter) {
-        currentChapter.value = nextChapter;
-    } else {
-        console.warn('Chapitre suivant non trouvé.');
-        alert("Fin de l'histoire 🎉");
-        currentChapter.value = null;
-    }
+    currentChapter.value = nextChapter ?? null;
 }
 </script>
+
 
 <style scoped>
 .chapter-card {

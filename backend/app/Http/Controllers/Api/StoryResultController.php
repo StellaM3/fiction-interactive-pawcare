@@ -10,20 +10,20 @@ class StoryResultController extends Controller
 {
     public function show($userId)
     {
-        // 🐾 Compter combien de choix sont pour Chat ou Chien dans Story 1
+        // ✅ Compter combien de choix sont pour Chat ou Chien dans Story 1
         $chatScore = DB::table('choices')
             ->join('chapters', 'choices.chapter_id', '=', 'chapters.id')
             ->where('chapters.story_id', 1)
-            ->where('choices.content', 'like', '%chat%')
+            ->where('choices.score_type', 'chat')
             ->count();
 
         $chienScore = DB::table('choices')
             ->join('chapters', 'choices.chapter_id', '=', 'chapters.id')
             ->where('chapters.story_id', 1)
-            ->where('choices.content', 'like', '%chien%')
+            ->where('choices.score_type', 'chien')
             ->count();
 
-        // Déterminer la prochaine Story
+        // 🐾 Déterminer la prochaine Story
         $nextStory = ($chatScore >= $chienScore) ? 'chat' : 'chien';
         $nextStoryId = ($nextStory === 'chat') ? 2 : 3;
 
@@ -37,4 +37,3 @@ class StoryResultController extends Controller
         ]);
     }
 }
-
