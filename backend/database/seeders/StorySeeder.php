@@ -51,6 +51,13 @@ class StorySeeder extends Seeder
             'title' => 'Type d\'interaction souhaitée',
             'content' => "En adoptant un animal, tu imagines plutôt passer ton temps à…",
         ]);
+
+        // --- Chapitre 6 (nouveau) ---
+$chapter6 = Chapter::create([
+    'story_id' => $story1->id,
+    'title'    => 'Vie nocturne',
+    'content'  => "La nuit, tu préfères être réveillé(e) par…",
+]);
         
         // CHOICES
         
@@ -116,19 +123,33 @@ class StorySeeder extends Seeder
         
         // Chapitre 5 (dernier)
         Choice::create([
-            'chapter_id' => $chapter5->id,
-            'content' => 'Avoir un compagnon indépendant qui aime son espace.',
-            'next_chapter_id' => null, // Fin : ici on déclenche l’analyse pour chat/chien
-            'score_type' => 'chat',
+            'chapter_id'     => $chapter5->id,          // ⚠️ on corrige les fins du chap. 5
+            'content'        => 'Avoir un compagnon indépendant qui aime son espace.',
+            'next_chapter_id'=> $chapter6->id,          // ▶️ enchaîne sur chap. 6
+            'score_type'     => 'chat',
         ]);
         
         Choice::create([
-            'chapter_id' => $chapter5->id,
-            'content' => 'Avoir un ami fidèle qui adore être près de toi et te suivre partout.',
-            'next_chapter_id' => null, // Fin
-            'score_type' => 'chien',
+            'chapter_id'     => $chapter5->id,
+            'content'        => 'Avoir un ami fidèle qui te suit partout.',
+            'next_chapter_id'=> $chapter6->id,
+            'score_type'     => 'chien',
         ]);
 
+        // Choix du nouveau chapitre 6
+Choice::create([
+    'chapter_id'      => $chapter6->id,
+    'content'         => "Un doux ronronnement près de tes pieds.",
+    'next_chapter_id' => null,
+    'score_type'      => 'chat',
+]);
+
+Choice::create([
+    'chapter_id'      => $chapter6->id,
+    'content'         => "Des petits pas pressés qui réclament une balade.",
+    'next_chapter_id' => null,
+    'score_type'      => 'chien',
+]);
         
         // STORY 2 : CHAT
 $story2 = Story::create([

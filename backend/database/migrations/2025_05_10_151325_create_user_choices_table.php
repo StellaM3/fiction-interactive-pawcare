@@ -14,13 +14,13 @@ return new class extends Migration
     Schema::create('user_choices', function (Blueprint $table) {
         $table->id();
 
-        // l’utilisateur qui a cliqué (nullable tant que tu n’as pas l’auth)
+        // colonne user_id (null le temps que tu n’as pas d’auth)
         $table->foreignId('user_id')
               ->nullable()
               ->constrained()
               ->cascadeOnDelete();
 
-        // le choix sélectionné
+        // choix sélectionné
         $table->foreignId('choice_id')
               ->constrained()
               ->cascadeOnDelete();

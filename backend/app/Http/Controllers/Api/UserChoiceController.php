@@ -3,22 +3,24 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\UserChoice;
 use Illuminate\Http\Request;
 
 class UserChoiceController extends Controller
 {
-    // POST /api/user-choices
     public function store(Request $request)
-{
-    $request->validate([
-        'choice_id' => 'required|exists:choices,id',
-    ]);
+    {
+        UserChoice::create([
+            'user_id'   => $request->input('user_id', 1),
+            'choice_id' => $request->input('choice_id'),
+        ]);
 
-    UserChoice::create([
-        'choice_id' => $request->choice_id,
-        'user_id'   => $request->user_id ?? 1,   // 1 = ID fixe tant que tu n’as pas d’auth
-    ]);
+        return response()->json(['status' => 'ok'], 201);
+    }
 
-    return response()->json(['message' => 'Choix enregistré']);
-}
+    public function reset(Request $request)
+    {
+        UserChoice::where('user_id', $request->input('user_id', 1))->delete();
+        return response()->json(['status' => 'reset']);
+    }
 }
