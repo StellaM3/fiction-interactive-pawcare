@@ -1,28 +1,33 @@
 <?php
-
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use App\Enums\ScoreType;
 
 class StoryResultController extends Controller
 {
     public function show(int $userId)
     {
-        $base = DB::table('user_choices')
+        // regroupe et compte en une seule requête
+        $counts = DB::table('user_choices')
             ->join('choices',  'choices.id',  '=', 'user_choices.choice_id')
             ->join('chapters', 'chapters.id', '=', 'choices.chapter_id')
             ->where('user_choices.user_id', $userId)
-            ->where('chapters.story_id', 1);       // on ne compte QUE la story 1
+            ->where('chapters.story_id', 1)
+            ->select('choices.score_type', DB::raw('COUNT(*) as total'))
+            ->groupBy('choices.score_type')
+            ->pluck('total', 'choices.score_type');
 
-        $chat  = (clone $base)->where('choices.score_type', 'chat' )->count();
-        $chien = (clone $base)->where('choices.score_type', 'chien')->count();
+        $chat  = $counts[ScoreType::CHAT->value]  ?? 0;
+        $chien = $counts[ScoreType::CHIEN->value] ?? 0;
 
-        $next  = $chat >= $chien ? 2 : 3;          // égalité → Chat
+        // si plus de “chien”, Story 3, sinon Story 2
+        $next = $chien > $chat ? 3 : 2;
 
         return response()->json([
             'next_story_id' => $next,
-            'scores'        => ['chat'=>$chat,'chien'=>$chien],
+            'scores'        => ['chat' => $chat, 'chien' => $chien],
         ]);
     }
 }

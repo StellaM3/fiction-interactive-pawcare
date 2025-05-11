@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use App\Models\Story;
 use App\Models\Chapter;
 use App\Models\Choice;
+use App\Enums\ScoreType;
 
 class StorySeeder extends Seeder
 {
@@ -81,14 +82,14 @@ $chapter6 = Chapter::create([
             'chapter_id' => $chapter2->id,
             'content' => 'Principalement à l\'intérieur (appartement ou maison fermée).',
             'next_chapter_id' => $chapter3->id,
-            'score_type' => 'chat',
+            'score_type' => ScoreType::CHAT,
         ]);
         
         Choice::create([
             'chapter_id' => $chapter2->id,
             'content' => 'Je profite souvent de l’extérieur (jardin, campagne…).',
             'next_chapter_id' => $chapter3->id,
-            'score_type' => 'chien',
+            'score_type' => ScoreType::CHIEN,
         ]);
         
         // Chapitre 3
@@ -96,14 +97,14 @@ $chapter6 = Chapter::create([
             'chapter_id' => $chapter3->id,
             'content' => 'J\'aime rester tranquille, plutôt posé(e).',
             'next_chapter_id' => $chapter4->id,
-            'score_type' => 'chat',
+            'score_type' => ScoreType::CHAT,
         ]);
         
         Choice::create([
             'chapter_id' => $chapter3->id,
             'content' => 'Je suis très actif(ve) et j\'adore bouger.',
             'next_chapter_id' => $chapter4->id,
-            'score_type' => 'chien',
+            'score_type' => ScoreType::CHIEN,
         ]);
         
         // Chapitre 4
@@ -111,14 +112,14 @@ $chapter6 = Chapter::create([
             'chapter_id' => $chapter4->id,
             'content' => 'Moins d\'une heure par jour.',
             'next_chapter_id' => $chapter5->id,
-            'score_type' => 'chat',
+            'score_type' => ScoreType::CHAT,
         ]);
         
         Choice::create([
             'chapter_id' => $chapter4->id,
             'content' => 'Plus de 2 heures par jour.',
             'next_chapter_id' => $chapter5->id,
-            'score_type' => 'chien',
+            'score_type' => ScoreType::CHIEN,
         ]);
         
         // Chapitre 5 (dernier)
@@ -126,14 +127,14 @@ $chapter6 = Chapter::create([
             'chapter_id'     => $chapter5->id,          // ⚠️ on corrige les fins du chap. 5
             'content'        => 'Avoir un compagnon indépendant qui aime son espace.',
             'next_chapter_id'=> $chapter6->id,          // ▶️ enchaîne sur chap. 6
-            'score_type'     => 'chat',
+            'score_type' => ScoreType::CHAT,
         ]);
         
         Choice::create([
             'chapter_id'     => $chapter5->id,
             'content'        => 'Avoir un ami fidèle qui te suit partout.',
             'next_chapter_id'=> $chapter6->id,
-            'score_type'     => 'chien',
+            'score_type' => ScoreType::CHIEN,
         ]);
 
         // Choix du nouveau chapitre 6
@@ -141,14 +142,14 @@ Choice::create([
     'chapter_id'      => $chapter6->id,
     'content'         => "Un doux ronronnement près de tes pieds.",
     'next_chapter_id' => null,
-    'score_type'      => 'chat',
+    'score_type' => ScoreType::CHAT,
 ]);
 
 Choice::create([
     'chapter_id'      => $chapter6->id,
     'content'         => "Des petits pas pressés qui réclament une balade.",
     'next_chapter_id' => null,
-    'score_type'      => 'chien',
+    'score_type' => ScoreType::CHIEN,
 ]);
         
         // STORY 2 : CHAT

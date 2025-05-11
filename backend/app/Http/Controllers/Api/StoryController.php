@@ -11,7 +11,8 @@ class StoryController extends Controller
     public function index()
     {
         // Récupérer toutes les histoires avec leurs chapitres et les choix de chaque chapitre
-        $stories = Story::with('chapters.choices')->get();
+        //$stories = Story::with('chapters.choices')->get();
+        return Story::with('chapters.choices')->get();
 
         return response()->json([
             'data' => $stories

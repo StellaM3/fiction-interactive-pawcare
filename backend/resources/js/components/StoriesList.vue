@@ -42,33 +42,45 @@
   /* démarre / redémarre une histoire                     */
   /* ---------------------------------------------------- */
   async function startStory(story) {
-    if (story.id === 1) {
-      await fetch('/api/user-choices/reset', {
-        method : 'POST',
-        headers: { 'Content-Type':'application/json' },
-        body   : JSON.stringify({ user_id: 1 })
-      })
-    }
-    currentStory.value   = story
-    currentChapter.value = story.chapters[0]
+  // ── seulement pour la Story 1 : on vide les anciens choix ──
+  if (story.id === 1) {
+    await fetch('/api/user-choices/reset', {
+      method: 'POST',
+      headers: {
+        'Content-Type'     : 'application/json',
+        'X-XSRF-TOKEN'     : document.querySelector('meta[name="csrf-token"]').content,
+        'X-Requested-With' : 'XMLHttpRequest'
+      },
+      credentials: 'same-origin',
+      body: JSON.stringify({ user_id: 1 })
+    });
   }
+
+  currentStory.value   = story;
+  currentChapter.value = story.chapters[0];
+}
   
   /* ---------------------------------------------------- */
   /* clic sur un choix                                    */
   /* ---------------------------------------------------- */
   async function selectChoice(choice) {
-    /* enregistre le choix */
-    await fetch('/api/user-choices', {
-      method : 'POST',
-      headers: { 'Content-Type':'application/json' },
-      body   : JSON.stringify({ user_id: 1, choice_id: choice.id })
-    })
+  await fetch('/api/user-choices', {
+    method: 'POST',
+    headers: {
+      'Content-Type'     : 'application/json',
+      'X-XSRF-TOKEN'     : document.querySelector('meta[name="csrf-token"]').content,
+      'X-Requested-With' : 'XMLHttpRequest'
+    },
+    credentials: 'same-origin',
+    body: JSON.stringify({ choice_id: choice.id, user_id: 1 })
+  });
+
   
     /* fin de la Story 1 → calcul chat/chien */
     if (!choice.next_chapter_id) {
       const r   = await fetch('/api/story1-result/1')
       const dat = await r.json()
-  
+      console.log(dat)
       const next = stories.value.find(s => s.id === dat.next_story_id)
       if (next) startStory(next)
       else      alert('Story suivante introuvable')
