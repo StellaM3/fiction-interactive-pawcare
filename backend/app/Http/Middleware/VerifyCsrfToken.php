@@ -6,11 +6,8 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as Middleware;
 
 class VerifyCsrfToken extends Middleware
 {
-    /**
-     * URIs pour lesquelles on NE vérifie PAS le token CSRF
-     * (nos appels AJAX depuis Vue).
-     */
+    /** Routes sans vérification CSRF */
     protected $except = [
-        'api/*',                  // ← règle large : toutes tes routes API
+        'api/*',                 // ← toutes les routes API
     ];
 }

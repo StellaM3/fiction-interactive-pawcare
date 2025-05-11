@@ -1,112 +1,92 @@
+<!-- resources/js/components/StoriesList.vue -->
 <template>
     <div>
-      <!-- Tant que currentChapter n'existe pas, on affiche "Chargement" -->
-      <div v-if="!currentChapter">
-        <p>Chargement en cours…</p>
-      </div>
-  
-      <!-- Dès qu'on a un chapitre, on délègue à ChapterView -->
+      <!-- Affiche le chapitre courant -->
       <ChapterView
-        v-else
+        v-if="currentChapter"
         :chapter="currentChapter"
         @choice-selected="selectChoice"
       />
+      <!-- Sinon, simple loader -->
+      <p v-else>Chargement…</p>
     </div>
   </template>
   
   <script setup>
   import { ref, onMounted } from 'vue'
-  import ChapterView from './ChapterView.vue'
+  import ChapterView        from './ChapterView.vue'
   
+  /* ---------------------------------------------------- */
+  /* state réactif                                         */
+  /* ---------------------------------------------------- */
   const stories        = ref([])
   const currentStory   = ref(null)
   const currentChapter = ref(null)
   
-  // 1️⃣ Chargement initial : on va chercher TOUTES les stories
+  /* ---------------------------------------------------- */
+  /* chargement initial : toutes les histoires            */
+  /* ---------------------------------------------------- */
   onMounted(async () => {
-    const res = await fetch('/api/stories')
-    if (!res.ok) {
-      console.error('Impossible de charger /api/stories', res.status)
-      return
-    }
-  
+    const res  = await fetch('/api/stories')
     const json = await res.json()
-    // gère { data: [...] } ou [...]
-    stories.value = json.data ?? json
+    stories.value = json.data ?? json          // tableau réel
   
     if (stories.value.length) {
-      // démarre la première histoire
-      await startStory(stories.value[0])
+      startStory(stories.value[0])
     } else {
-      console.error('Aucune story trouvée 😱')
+      console.error('Aucune story trouvée')
     }
   })
   
-  // Fonction pour lancer / relancer une story
+  /* ---------------------------------------------------- */
+  /* démarre / redémarre une histoire                     */
+  /* ---------------------------------------------------- */
   async function startStory(story) {
-    // Si on relance la Story 1, on reset côté back (user‐choices)
     if (story.id === 1) {
-      const resetRes = await fetch('/api/user-choices/reset', {
+      await fetch('/api/user-choices/reset', {
         method : 'POST',
         headers: { 'Content-Type':'application/json' },
         body   : JSON.stringify({ user_id: 1 })
       })
-      if (!resetRes.ok && resetRes.status !== 404) {
-        console.warn('Reset des choix impossible', resetRes.status)
-      }
     }
-  
     currentStory.value   = story
     currentChapter.value = story.chapters[0]
   }
   
-  // Quand je clique sur un choix
+  /* ---------------------------------------------------- */
+  /* clic sur un choix                                    */
+  /* ---------------------------------------------------- */
   async function selectChoice(choice) {
-    // 🌱 1) On enregistre le choix
-    const saveRes = await fetch('/api/user-choices', {
+    /* enregistre le choix */
+    await fetch('/api/user-choices', {
       method : 'POST',
       headers: { 'Content-Type':'application/json' },
-      body   : JSON.stringify({ choice_id: choice.id, user_id: 1 })
+      body   : JSON.stringify({ user_id: 1, choice_id: choice.id })
     })
-    if (!saveRes.ok) {
-      console.warn('Enregistrement du choix échoué', saveRes.status)
-    }
   
-    // 🔀 2) Si next_chapter_id est null, c'est la fin de la Story 1
+    /* fin de la Story 1 → calcul chat/chien */
     if (!choice.next_chapter_id) {
-  const res  = await fetch('/api/story1-result/1');
-  if (!res.ok) {
-    console.error('Erreur /api/story1-result/1', res.status);
-    return;
-  }
-  const data = await res.json();
-  console.log('Résultat Story 1:', data);
-
-  const next = stories.value.find(s => s.id === data.next_story_id);
-  if (next) await startStory(next);
-  else      alert("Story suivante introuvable 😅");
-
-  return;
-}
+      const r   = await fetch('/api/story1-result/1')
+      const dat = await r.json()
   
-    // ➡️ navigation Chapitre → Chapitre
-    const suivant = currentStory.value.chapters
-                      .find(c => c.id === choice.next_chapter_id)
-    if (suivant) {
-      currentChapter.value = suivant
-    } else {
-      console.warn('Chapitre suivant introuvable pour id', choice.next_chapter_id)
-      currentChapter.value = null
+      const next = stories.value.find(s => s.id === dat.next_story_id)
+      if (next) startStory(next)
+      else      alert('Story suivante introuvable')
+      return
     }
+  
+    /* navigation normale chapitre → chapitre */
+    currentChapter.value =
+      currentStory.value.chapters.find(c => c.id === choice.next_chapter_id)
   }
   </script>
   
   <style scoped>
-  .chapter-card {
-    border: 1px solid #ccc;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 8px;
+  .chapter-card{
+    border:1px solid #ccc;
+    padding:1rem;
+    margin-bottom:1rem;
+    border-radius:8px;
   }
   </style>
   
