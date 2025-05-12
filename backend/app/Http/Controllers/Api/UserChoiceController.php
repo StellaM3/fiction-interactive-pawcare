@@ -3,24 +3,30 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserChoiceRequest;
+use App\Http\Requests\ResetUserChoicesRequest;
 use App\Models\UserChoice;
-use Illuminate\Http\Request;
 
 class UserChoiceController extends Controller
 {
-    public function store(Request $request)
+    public function store(UserChoiceRequest $request)
     {
-        UserChoice::create([
-            'user_id'   => $request->input('user_id', 1),
-            'choice_id' => $request->input('choice_id'),
+        $validated = $request->validated();
+        
+        $userChoice = UserChoice::create([
+            'user_id' => $validated['user_id'],
+            'choice_id' => $validated['choice_id']
         ]);
 
         return response()->json(['status' => 'ok'], 201);
     }
 
-    public function reset(Request $request)
+    public function reset(ResetUserChoicesRequest $request)
     {
-        UserChoice::where('user_id', $request->input('user_id', 1))->delete();
-        return response()->json(['status' => 'reset']);
+        $validated = $request->validated();
+        
+        UserChoice::where('user_id', $validated['user_id'])->delete();
+
+        return response()->json(['status' => 'ok']);
     }
 }

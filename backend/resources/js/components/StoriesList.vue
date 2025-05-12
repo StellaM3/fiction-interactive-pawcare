@@ -41,7 +41,7 @@ const getDisplayedChapter = computed(() => {
 /* chargement initial : toutes les histoires            */
 /* ---------------------------------------------------- */
 onMounted(async () => {
-  const res = await fetch('/api/stories')
+  const res = await fetch('/api/v1/stories')
   const json = await res.json()
   stories.value = json.data ?? json
   
@@ -57,7 +57,7 @@ onMounted(async () => {
 /* ---------------------------------------------------- */
 async function startStory(story) {
   if (story.id === 1) {
-    await fetch('/api/user-choices/reset', {
+    await fetch('/api/v1/user-choices/reset', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ async function startStory(story) {
 /* clic sur un choix                                    */
 /* ---------------------------------------------------- */
 async function selectChoice(choice) {
-  await fetch('/api/user-choices', {
+  await fetch('/api/v1/user-choices', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ async function selectChoice(choice) {
 
   if (!choice.next_chapter_id) {
     if (currentStory.value.id === 1) {
-      const r = await fetch('/api/story1-result/1')
+      const r = await fetch('/api/v1/story1-result/1')
       const dat = await r.json()
       const next = stories.value.find(s => s.id === dat.next_story_id)
       if (next) startStory(next)
