@@ -7,9 +7,12 @@ use App\Http\Requests\UserChoiceRequest;
 use App\Http\Requests\ResetUserChoicesRequest;
 use App\Models\UserChoice;
 use App\Exceptions\ApiException;
+use App\Traits\JsonResponseTrait;
 
 class UserChoiceController extends Controller
 {
+    use JsonResponseTrait;
+
     public function store(UserChoiceRequest $request)
     {
         try {
@@ -20,10 +23,11 @@ class UserChoiceController extends Controller
                 'choice_id' => $validated['choice_id']
             ]);
 
-            return response()->json([
-                'status' => 'success',
-                'data' => $userChoice
-            ], 201);
+            return $this->successResponse(
+                $userChoice,
+                'Choice saved successfully',
+                201
+            );
         } catch (\Exception $e) {
             throw new ApiException('Failed to save user choice', 500);
         }
@@ -35,10 +39,10 @@ class UserChoiceController extends Controller
             $validated = $request->validated();
             UserChoice::where('user_id', $validated['user_id'])->delete();
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Choices reset successfully'
-            ]);
+            return $this->successResponse(
+                null,
+                'Choices reset successfully'
+            );
         } catch (\Exception $e) {
             throw new ApiException('Failed to reset choices', 500);
         }

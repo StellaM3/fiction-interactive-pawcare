@@ -4,18 +4,19 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Story;
-use Illuminate\Http\Request;
+use App\Traits\JsonResponseTrait;
 
 class StoryController extends Controller
 {
+    use JsonResponseTrait;
+
     public function index()
     {
-        // Récupérer toutes les histoires avec leurs chapitres et les choix de chaque chapitre
-        //$stories = Story::with('chapters.choices')->get();
-        return Story::with('chapters.choices')->get();
-
-        return response()->json([
-            'data' => $stories
-        ]);
+        try {
+            $stories = Story::with('chapters.choices')->get();
+            return response()->json($stories);
+        } catch (\Exception $e) {
+            throw new ApiException('Failed to retrieve stories', 500);
+        }
     }
 }
