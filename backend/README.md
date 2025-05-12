@@ -1,61 +1,103 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🐾 Fiction Interactive PawCare
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Une fiction interactive sur l'adoption et les soins des animaux de compagnie chats et chiens, développée avec Laravel et Vue.js par Estelle Rossier.
 
-## About Laravel
+## 📋 Description
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+PawCare est une application web interactive qui guide les utilisateurs à travers l'expérience d'adoption d'un animal de compagnie. L'histoire se déroule en trois parties :
+1. Un questionnaire pour déterminer quel animal correspond le mieux à votre style de vie
+2. Une histoire interactive sur la vie avec un chat
+3. Une histoire interactive sur la vie avec un chien
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🔧 Installation
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Prérequis
+- PHP 8.1+
+- Composer
+- Node.js & NPM
+- SQLite 
 
-## Learning Laravel
+### Étapes d'installation
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1. Cloner le repository
+```bash
+git clone https://github.com/StellaM3/fiction-interactive-pawcare.git
+cd fiction-interactive-pawcare
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+2. Installer les dépendances PHP
+```bash
+cd backend
+composer install
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+3. Configurer l'environnement
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-## Laravel Sponsors
+4. Configurer la base de données dans .env
+```
+DB_CONNECTION=sqlite
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+5. Créer la base de données et exécuter les migrations
+```bash
+touch database/database.sqlite
+php artisan migrate
+php artisan db:seed --class=StorySeeder
+```
 
-### Premium Partners
+6. Installer les dépendances JavaScript
+```bash
+npm install
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development/)**
-- **[Active Logic](https://activelogic.com)**
+7. Lancer les serveurs de développement
+```bash
+# Terminal 1
+php artisan serve
 
-## Contributing
+# Terminal 2
+npm run dev
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Ou directement
+composer run dev
+```
 
-## Code of Conduct
+## 🎮 Fonctionnalités
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+- Système de choix multiples influençant l'histoire
+- Calcul de scores (bonheur, santé, énergie)
+- Différentes fins possibles selon vos choix
+- Navigation fluide entre les chapitres
+- Interface responsive
 
-## Security Vulnerabilities
+## 🛠 Technologies utilisées
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- Backend: Laravel 12
+- Frontend: Vue.js 3
+- Base de données: SQLite
+- API RESTful
+- Vite pour le build frontend
 
-## License
+## 📝 Structure du projet
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```
+fiction-interactive-pawcare/
+├── backend/
+│   ├── app/
+│   ├── database/
+│   │   ├── migrations/
+│   │   └── seeders/
+│   └── routes/
+└── frontend/
+    └── resources/
+        └── js/
+            └── components/
+```
+
+## 📄 License
+
+Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
