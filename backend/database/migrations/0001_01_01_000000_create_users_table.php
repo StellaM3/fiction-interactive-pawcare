@@ -4,10 +4,31 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Migration initiale pour la création des tables d'authentification
+ * Crée trois tables essentielles:
+ * - users: Stocke les données utilisateurs
+ * - password_reset_tokens: Gère la réinitialisation des mots de passe
+ * - sessions: Gère les sessions utilisateurs
+ */
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Crée les tables nécessaires à l'authentification
+     * 
+     * Table users:
+     * - Informations de base (nom, email)
+     * - Sécurité (mot de passe, vérification email)
+     * - Rôle utilisateur (admin/user)
+     * - Timestamps et remember token
+     * 
+     * Table password_reset_tokens:
+     * - Stocke les tokens de réinitialisation
+     * - Lie le token à un email
+     * 
+     * Table sessions:
+     * - Gère les sessions actives
+     * - Stocke les données de connexion
      */
     public function up(): void
     {
@@ -39,7 +60,8 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Supprime les tables dans l'ordre inverse de création
+     * Important: L'ordre évite les erreurs de clés étrangères
      */
     public function down(): void
     {

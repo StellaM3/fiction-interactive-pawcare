@@ -10,8 +10,28 @@ use App\Http\Controllers\Api\{
     StoryResultController,
     AuthController
 };
+/**
+ * Routes API de l'application PawCare
+ * Toutes les routes sont préfixées par /api/v1
+ * Format de réponse: JSON
+ */
 Route::prefix('v1')->group(function () {
-    // Routes publiques (lecture seule)
+     /**
+     * Routes publiques (lecture seule)
+     * 
+     * GET endpoints:
+     * - /stories: Liste toutes les histoires
+     * - /chapters: Liste tous les chapitres
+     * - /chapters/{id}: Détails d'un chapitre
+     * - /choices: Liste tous les choix disponibles
+     * 
+     * POST endpoints:
+     * - /user-choices: Enregistre un choix utilisateur
+     * - /user-choices/reset: Réinitialise les choix
+     * 
+     * Résultats:
+     * - /story1-result/{userId}: Calcule le résultat pour l'histoire 1
+     */
  
     Route::get('stories', [StoryController::class, 'index']);
     Route::get('chapters', [ChapterController::class, 'index']);

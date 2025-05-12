@@ -4,10 +4,32 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Migration pour créer les tables de gestion des jobs
+ * Crée trois tables essentielles:
+ * - jobs: Stocke les jobs en attente d'exécution
+ * - job_batches: Gère les lots de jobs
+ * - failed_jobs: Enregistre les jobs qui ont échoué
+ */
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Crée les tables de gestion des jobs
+     * 
+     * Table jobs:
+     * - Stocke les jobs en file d'attente
+     * - Suit les tentatives et la disponibilité
+     * - Gère la priorité via queue
+     * 
+     * Table job_batches:
+     * - Gère des groupes de jobs liés
+     * - Suit la progression et les échecs
+     * - Permet l'annulation de lots
+     * 
+     * Table failed_jobs:
+     * - Enregistre les jobs échoués
+     * - Stocke les détails d'erreur
+     * - Permet la relance des jobs
      */
     public function up(): void
     {
@@ -46,7 +68,8 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Supprime les tables dans l'ordre inverse
+     * Nettoie toutes les données de jobs
      */
     public function down(): void
     {

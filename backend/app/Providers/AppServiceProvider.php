@@ -4,11 +4,16 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
-
+/**
+ * Service Provider principal de l'application
+ * Gère l'initialisation et la configuration globale
+ */
 class AppServiceProvider extends ServiceProvider
 {
     /**
      * Register any application services.
+     * Utilisé pour enregistrer des services dans le container IoC
+     * Appelé avant le boot()
      */
     public function register(): void
     {
@@ -17,6 +22,9 @@ class AppServiceProvider extends ServiceProvider
 
     /**
      * Bootstrap any application services.
+     * Configuration globale de l'application
+     * - Routes API avec préfixe 'api/' et middleware 'api'
+     * - Routes Web avec middleware 'web' pour sessions/CSRF
      */
     public function boot(): void
     {

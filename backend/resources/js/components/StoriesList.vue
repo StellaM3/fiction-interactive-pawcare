@@ -1,7 +1,15 @@
 <!-- resources/js/components/StoriesList.vue -->
+ <!-- 
+  StoriesList.vue - Composant principal de gestion des histoires
+  Gère:
+  - Le chargement et l'affichage des histoires
+  - La navigation entre les chapitres
+  - Le suivi des choix utilisateur
+  - Le calcul des fins alternatives
+-->
 <template>
     <div>
-      <!-- Affiche le chapitre courant -->
+      <!-- Affiche le chapitre courant via ChapterView-->
       <ChapterView
         v-if="currentChapter"
         :chapter="getDisplayedChapter"
@@ -17,14 +25,20 @@ import { ref, onMounted, computed } from 'vue'
 import ChapterView from './ChapterView.vue'
   
 /* ---------------------------------------------------- */
-/* state réactif                                         */
+/* State réactif pour suivre l'état du jeu               */
+/* - stories: Toutes les histoires disponibles           */
+/* - currentStory: Histoire en cours                     */
+/* - currentChapter: Chapitre actuel                    */
+/* - userChoices: Tableau des choix effectués                                         */
 /* ---------------------------------------------------- */
 const stories = ref([])
 const currentStory = ref(null)
 const currentChapter = ref(null)
-const userChoices = ref([]) // Add this line to define userChoices ref
+const userChoices = ref([]) 
+
 /* ---------------------------------------------------- */
-/* computed property pour gérer l'affichage              */
+/* Computed pour la logique d'affichage conditionnelle   */
+/* Gère l'affichage des fins alternatives selon score             */
 /* ---------------------------------------------------- */
 const getDisplayedChapter = computed(() => {
   if (!currentChapter.value || !currentStory.value) return null
@@ -38,7 +52,10 @@ const getDisplayedChapter = computed(() => {
 })
 
 
-
+/* ---------------------------------------------------- */
+/* Vérification de l'authentification                    */
+/* Redirige vers /login si non authentifié              */
+/* ---------------------------------------------------- */
 async function checkAuth() {
     try {
         const response = await fetch('/api/v1/check', {
@@ -61,7 +78,8 @@ async function checkAuth() {
 
   
 /* ---------------------------------------------------- */
-/* chargement initial : toutes les histoires            */
+/* Chargement initial des histoires                      */
+/* Lance automatiquement la première histoire               */
 /* ---------------------------------------------------- */
 onMounted(async () => {
   const res = await fetch('/api/v1/stories')
@@ -76,7 +94,8 @@ onMounted(async () => {
 })
   
 /* ---------------------------------------------------- */
-/* démarre / redémarre une histoire                     */
+/* Gestion du démarrage/redémarrage d'une histoire      */
+/* Reset les choix et initialise le premier chapitre                    */
 /* ---------------------------------------------------- */
 async function startStory(story) {
   if (story.id === 1) {
@@ -99,7 +118,10 @@ async function startStory(story) {
 }
   
 /* ---------------------------------------------------- */
-/* clic sur un choix                                    */
+/* Traitement de la sélection d'un choix                */
+/* - Sauvegarde en base via API                         */
+/* - Met à jour les scores                              */
+/* - Gère la transition vers le prochain chapitre                                    */
 /* ---------------------------------------------------- */
 async function selectChoice(choice) {
   await fetch('/api/v1/user-choices', {
@@ -146,12 +168,14 @@ async function selectChoice(choice) {
 }
 
 /* ---------------------------------------------------- */
-/* fonction pour calculer les scores et choisir la fin   */
+/* Logique de calcul des fins alternatives              */
+/* Basée sur les scores cumulés des choix:              */
+/* - bonheur: seuil 5 pour fin heureuse                 */
+/* - sante: seuil 3 pour fin heureuse                   */
+/* - energie: seuil 2 pour fin heureuse       */
 /* ---------------------------------------------------- */
 function determineEnding() {
-  //const userChoices = currentStory.value.chapters
-    //.flatMap(chapter => chapter.choices)
-    //.filter(choice => choice.selected)
+  
 
   const totalScores = userChoices.value.reduce((acc, choice) => {
     acc.bonheur += parseInt(choice.impact_bonheur || 0) 
@@ -160,7 +184,7 @@ function determineEnding() {
     return acc
   }, { bonheur: 0, sante: 0, energie: 0 })
 
-  console.log('Choices array:', userChoices.value) // 🟢 ADD: Debug log
+  console.log('Choices array:', userChoices.value) 
   console.log('Choices made:', userChoices.value.length)
   console.log('Total scores:', totalScores); // Debug scores
 
@@ -187,16 +211,13 @@ function determineEnding() {
     ? endings.find(chapter => chapter.title?.includes('harmonie') || chapter.title?.includes('duo'))
     : endings.find(chapter => chapter.title?.includes('difficiles') || chapter.title?.includes('défis'))
 
-    // Reset choices for next story
-    //if (endings.length) {
-    //userChoices.value = []
-  //}
+   
 
   
     return selectedEnding 
 }
 </script>
-  
+
 <style scoped>
 .chapter-card {
   border: 1px solid #ccc;

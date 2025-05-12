@@ -4,10 +4,23 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Migration pour créer la table des choix
+ * Cette table stocke:
+ * - Les choix disponibles dans chaque chapitre
+ * - Le chapitre suivant associé à chaque choix
+ * - L'impact du choix sur le score (chat/chien)
+ */
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Crée la table choices avec:
+     * - id: Identifiant unique auto-incrémenté
+     * - chapter_id: Clé étrangère vers le chapitre parent (cascade)
+     * - content: Texte du choix présenté à l'utilisateur
+     * - score_type: Type de score impacté (chat/chien)
+     * - next_chapter_id: Chapitre suivant (nullable, set null on delete)
+     * - timestamps: Dates de création et modification
      */
     public function up(): void
     {
@@ -22,7 +35,8 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     *  Supprime la table choices
+     * Table pivot - pas besoin de cascade car déjà géré par les foreign keys
      */
     public function down(): void
     {

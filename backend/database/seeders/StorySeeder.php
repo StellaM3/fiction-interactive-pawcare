@@ -8,8 +8,27 @@ use App\Models\Chapter;
 use App\Models\Choice;
 use App\Enums\ScoreType;
 
+/**
+ * Seeder pour initialiser les histoires interactives
+ * Crée trois histoires distinctes:
+ * 1. Le questionnaire initial (aide au choix chat/chien)
+ * 2. L'histoire avec un chat (premier mois d'adoption)
+ * 3. L'histoire avec un chien (premier mois d'adoption)
+ */
 class StorySeeder extends Seeder
 {
+    /**
+     * Crée toutes les histoires avec leurs chapitres et choix
+     * Structure:
+     * - Story: Histoire principale
+     *   - Chapters: Chapitres de l'histoire
+     *     - Choices: Choix disponibles avec impacts
+     * 
+     * Les impacts sont mesurés sur 3 métriques:
+     * - bonheur (-2 à +3)
+     * - sante (-2 à +3)
+     * - energie (-1 à +2)
+     */
     public function run(): void
     {
         // STORY 1: Adopter ton compagnon parfait (mise à jour)

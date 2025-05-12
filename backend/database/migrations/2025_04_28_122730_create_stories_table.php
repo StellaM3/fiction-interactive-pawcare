@@ -4,10 +4,20 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * Migration pour créer la table des histoires interactives
+ * Cette table est la table principale qui contient:
+ * - Les informations de base des histoires
+ * - Les liens vers les chapitres associés
+ */
 return new class extends Migration
 {
     /**
-     * Run the migrations.
+     * Crée la table stories avec:
+     * - id: Identifiant unique auto-incrémenté
+     * - title: Titre de l'histoire
+     * - description: Description optionnelle de l'histoire
+     * - timestamps: Dates de création et modification
      */
     public function up(): void
     {
@@ -20,7 +30,8 @@ return new class extends Migration
     }
 
     /**
-     * Reverse the migrations.
+     * Supprime la table stories
+     * Cette action supprime aussi tous les chapitres associés via cascade
      */
     public function down(): void
     {

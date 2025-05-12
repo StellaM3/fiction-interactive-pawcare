@@ -7,10 +7,32 @@ use Illuminate\Support\Facades\DB;
 use App\Enums\ScoreType;
 use App\Traits\JsonResponseTrait;
 
+/**
+ * Gère le calcul et l'affichage des résultats de l'histoire interactive
+ * Détermine la prochaine histoire basée sur les choix de l'utilisateur
+ * Utilise un système de score pour suivre les préférences chat/chien
+ */
 class StoryResultController extends Controller
 {
+    //Utilise JsonResponseTrait pour standardiser les réponses API
     use JsonResponseTrait;
 
+
+        /**
+     * Calcule et affiche le résultat pour un utilisateur spécifique
+     * GET /api/story1-result/{userId}
+     *
+     * @param int $userId Identifiant de l'utilisateur
+     * @return \Illuminate\Http\JsonResponse Contient:
+     *      - next_story_id: ID de la prochaine histoire (2 pour chat, 3 pour chien)
+     *      - scores: Tableau des scores {'chat': X, 'chien': Y}
+     * 
+     * Processus:
+     * 1. Joint les tables user_choices, choices et chapters
+     * 2. Filtre par utilisateur et histoire (id=1)
+     * 3. Compte les choix par type (chat/chien)
+     * 4. Détermine la prochaine histoire selon le score le plus élevé
+     */
     public function show(int $userId)
     {
         $counts = DB::table('user_choices')

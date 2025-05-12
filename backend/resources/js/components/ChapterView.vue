@@ -1,10 +1,15 @@
 <template>
+   <!-- Wrapper principal pour centrer le contenu -->
     <div class="chapter-wrapper">
+       <!-- Carte contenant le chapitre et ses choix -->
       <div class="chapter-card">
+         <!-- Titre et contenu du chapitre -->
         <h2>{{ chapter.title }}</h2>
         <p>{{ chapter.content }}</p>
+        <!-- Liste des choix disponibles -->
         <ul class="choices-list">
           <li v-for="(choice, i) in chapter.choices" :key="choice.id">
+              <!-- Bouton émettant l'événement de sélection -->
             <button @click="$emit('choice-selected', choice)">
               {{ choice.content }}
             </button>
@@ -15,12 +20,20 @@
   </template>
   
   <script setup>
+  /**
+ * Composant d'affichage d'un chapitre
+ * Props:
+ * - chapter: Objet contenant title, content et choices[]
+ * Events émis:
+ * - choice-selected: Envoyé quand un choix est cliqué
+ */
   defineProps({
     chapter: Object
   })
   </script>
   
   <style scoped>
+  /* Structure générale */
   /* wrapper centré */
   .chapter-wrapper {
     display: flex;
@@ -28,6 +41,7 @@
     padding: 2rem 1rem;
   }
   
+  /* Design de la carte */
   /* carte au milieu avec max-width */
   .chapter-card {
     width: 100%;
@@ -39,6 +53,7 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.06);
   }
   
+  /* Typographie et espacement */
   /* titres & texte */
   .chapter-card h2 {
     margin-top: 0;
@@ -51,6 +66,7 @@
     margin-bottom: 1.5rem;
   }
   
+  /* Layout des choix en grille flexible */
   /* liste flex pour les boutons */
   .choices-list {
     display: flex;
@@ -61,7 +77,7 @@
     margin: 0;
   }
   
-  /* boutons plus gros */
+  /* Style des boutons de choix */
   button {
     flex: 1 1 calc(50% - 1rem);
     min-width: 220px;
@@ -75,7 +91,7 @@
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
   }
   
-  /* garder tes couleurs pastel alternées */
+ /* Alternance de couleurs pour les boutons */
   .choices-list li:nth-child(2n+1) button {
     background-color: #ffe3e3;
     color: #5a2a2a;
@@ -85,7 +101,7 @@
     color: #5a4a00;
   }
   
-  /* hover effet léger */
+ /* Animation au survol */
   button:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(0,0,0,0.15);

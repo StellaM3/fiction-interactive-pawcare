@@ -66,6 +66,21 @@ npm run dev
 composer run dev
 ```
 
+## 👤 Comptes de test
+
+L'application est livrée avec deux comptes préconfigurés :
+
+### Compte invité (utilisateur standard)
+- Email: `test@example.com`
+- Mot de passe: `123456`
+- Accès: Lecture des histoires et sauvegarde des choix
+
+### Compte administrateur
+- Email: `admin@example.com`
+- Mot de passe: `123456`
+- Accès: Fonctionnalités standard + création d'histoires
+
+
 ## 🎮 Fonctionnalités
 
 - Système de choix multiples influençant l'histoire
