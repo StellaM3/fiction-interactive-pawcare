@@ -194,10 +194,16 @@ $chapter2_6 = Chapter::create([
     'content' => "Ton chat tourne autour de toi, l’air espiègle. Il bondit, s’accroche à ta manche… pas de doute : il veut jouer ! Mais toi, tu es affalé(e) sur le canapé après une longue journée. Que fais-tu pour ton petit compagnon ?",
 ]);
 
-$chapter2_7 = Chapter::create([
+$chapter2_happy = Chapter::create([
     'story_id' => $story2->id,
-    'title' => 'Bilan du premier mois',
-    'content' => "Un mois s’est écoulé depuis l’adoption. Ton chat te regarde avec ses grands yeux brillants. Il est à la fois plus confiant, plus proche de toi… ou peut-être un peu distant selon vos aventures. Tu repenses à chaque choix que tu as fait et ressens la fierté d’avoir changé la vie de ce petit être.",
+    'title' => 'Une belle harmonie',
+    'content' => "Après un mois, ton chat s'est parfaitement adapté. Il te fait confiance, ronronne sur tes genoux et semble épanoui. Vos routines sont bien établies et tu as su répondre à ses besoins. Une véritable complicité s'est créée entre vous.",
+]);
+
+$chapter2_sad = Chapter::create([
+    'story_id' => $story2->id,
+    'title' => 'Des débuts difficiles',
+    'content' => "Après un mois, ton chat reste distant et stressé. Il se cache souvent, griffe les meubles et semble mal à l'aise. Tu réalises que l'adaptation est plus compliquée que prévu et qu'il faudra plus de patience et d'ajustements.",
 ]);
 
 // ✅ CHOICES (ensuite seulement !)
@@ -301,7 +307,7 @@ Choice::create([
 Choice::create([
     'chapter_id' => $chapter2_6->id,
     'content' => "Je sors sa canne à pêche et on joue ensemble pendant un bon moment.",
-    'next_chapter_id' => $chapter2_7->id,
+    'next_chapter_id' => null,
     'impact_bonheur' => 3,
     'impact_sante' => 1,
     'impact_energie' => 2,
@@ -310,7 +316,7 @@ Choice::create([
 Choice::create([
     'chapter_id' => $chapter2_6->id,
     'content' => "Je suis épuisé(e)… tant pis, il jouera seul.",
-    'next_chapter_id' => $chapter2_7->id,
+    'next_chapter_id' => null,
     'impact_bonheur' => -1,
     'impact_sante' => 0,
     'impact_energie' => -1,
@@ -358,10 +364,16 @@ $chapter3_6 = Chapter::create([
     'content' => "Au parc, ton chien rencontre d’autres chiens pour la première fois. Il saute, aboie, semble surexcité. Quelle attitude adoptes-tu ?",
 ]);
 
-$chapter3_7 = Chapter::create([
+$chapter3_happy = Chapter::create([
     'story_id' => $story3->id,
-    'title' => 'Bilan du premier mois',
-    'content' => "Un mois déjà avec ton fidèle compagnon ! Entre moments de joie, d’apprentissage et de petits défis, tu observes les progrès réalisés. Ton chien semble heureux et tu ressens cette belle complicité naissante.",
+    'title' => 'Un duo inséparable',
+    'content' => "Un mois s'est écoulé et ton chien est devenu ton meilleur ami. Il est obéissant, joyeux et équilibré. Vos balades quotidiennes sont des moments de pure joie et votre lien est plus fort que jamais.",
+]);
+
+$chapter3_sad = Chapter::create([
+    'story_id' => $story3->id,
+    'title' => 'Des défis à surmonter',
+    'content' => "Après un mois, la vie avec ton chien s'avère plus compliquée que prévu. Il montre des signes d'anxiété, tire en laisse et a du mal à s'adapter. Tu réalises que l'éducation demandera plus d'efforts et de temps.",
 ]);
 
 // ✅ CHOICES (ensuite)
@@ -465,7 +477,7 @@ Choice::create([
 Choice::create([
     'chapter_id' => $chapter3_6->id,
     'content' => "Je surveille de loin et le laisse socialiser librement.",
-    'next_chapter_id' => $chapter3_7->id,
+    'next_chapter_id' => null,
     'impact_bonheur' => 2,
     'impact_sante' => 1,
     'impact_energie' => 2,
@@ -474,7 +486,7 @@ Choice::create([
 Choice::create([
     'chapter_id' => $chapter3_6->id,
     'content' => "Je le tiens fermement en laisse pour éviter tout débordement.",
-    'next_chapter_id' => $chapter3_7->id,
+    'next_chapter_id' => null,
     'impact_bonheur' => 0,
     'impact_sante' => 0,
     'impact_energie' => 0,
