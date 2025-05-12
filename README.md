@@ -22,7 +22,7 @@ PawCare est une application web interactive qui guide les utilisateurs à traver
 1. Cloner le repository
 ```bash
 git clone https://github.com/StellaM3/fiction-interactive-pawcare.git
-cd fiction-interactive-pawcare
+cd fiction-interactive-pawcare 
 ```
 
 2. Installer les dépendances PHP
