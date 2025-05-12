@@ -10,13 +10,17 @@ use App\Http\Controllers\Api\{
     StoryResultController
 };
 Route::prefix('v1')->group(function () {
-Route::get('stories',        [StoryController::class,   'index']);
-Route::get('chapters',       [ChapterController::class, 'index']);
-Route::get('chapters/{id}',  [ChapterController::class, 'show']);
-Route::get('choices',        [ChoiceController::class,  'index']);
+    // Routes publiques (lecture seule)
+    Route::get('stories', [StoryController::class, 'index']);
+    Route::get('chapters', [ChapterController::class, 'index']);
+    Route::get('chapters/{id}', [ChapterController::class, 'show']);
+    Route::get('choices', [ChoiceController::class, 'index']);
+    Route::post('user-choices', [UserChoiceController::class, 'store']);
+    Route::post('user-choices/reset', [UserChoiceController::class, 'reset']);
+    Route::get('story1-result/{userId}', [StoryResultController::class, 'show']);
 
-Route::post('user-choices',       [UserChoiceController::class, 'store']);
-Route::post('user-choices/reset', [UserChoiceController::class, 'reset']);
-
-Route::get('story1-result/{userId}', [StoryResultController::class, 'show']);
+    // Routes protégées (modifications)
+    Route::middleware(\App\Http\Middleware\ValidateApiAccess::class)->group(function () {
+       Route::get('admin', [StoryController::class, 'store']);
+    });
 });

@@ -62,7 +62,8 @@ async function startStory(story) {
       headers: {
         'Content-Type': 'application/json',
         'X-XSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-        'X-Requested-With': 'XMLHttpRequest'
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-API-Key': 'pawcare_2025'
       },
       credentials: 'same-origin',
       body: JSON.stringify({ user_id: 1 })
@@ -83,7 +84,8 @@ async function selectChoice(choice) {
     headers: {
       'Content-Type': 'application/json',
       'X-XSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-      'X-Requested-With': 'XMLHttpRequest'
+      'X-Requested-With': 'XMLHttpRequest',
+      'X-API-Key': 'pawcare_2025'
     },
     credentials: 'same-origin',
     body: JSON.stringify({ choice_id: choice.id, user_id: 1 })
