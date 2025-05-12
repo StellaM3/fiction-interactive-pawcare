@@ -213,8 +213,8 @@ Choice::create([
     'chapter_id' => $chapter2_1->id,
     'content' => "Tu lui aménages un coin calme avec une couverture, de la nourriture et un jouet.",
     'next_chapter_id' => $chapter2_2->id,
-    'impact_bonheur' => 2,
-    'impact_sante' => 1,
+    'impact_bonheur' => 3,
+    'impact_sante' => 2,
     'impact_energie' => 1,
 ]);
 
@@ -232,9 +232,9 @@ Choice::create([
     'chapter_id' => $chapter2_2->id,
     'content' => "Je lui mets de l’eau fraîche comme recommandé par le vétérinaire.",
     'next_chapter_id' => $chapter2_3->id,
-    'impact_bonheur' => 2,
+    'impact_bonheur' => 3,
     'impact_sante' => 2,
-    'impact_energie' => 0,
+    'impact_energie' => 1,
 ]);
 
 Choice::create([
@@ -261,7 +261,7 @@ Choice::create([
     'content' => "Je lui propose un griffoir et ignore la bêtise : il doit apprendre.",
     'next_chapter_id' => $chapter2_4->id,
     'impact_bonheur' => 2,
-    'impact_sante' => 0,
+    'impact_sante' => 1,
     'impact_energie' => 1,
 ]);
 
@@ -272,7 +272,7 @@ Choice::create([
     'next_chapter_id' => $chapter2_5->id,
     'impact_bonheur' => -1,
     'impact_sante' => 3,
-    'impact_energie' => 0,
+    'impact_energie' => 1,
 ]);
 
 Choice::create([
@@ -309,7 +309,7 @@ Choice::create([
     'content' => "Je sors sa canne à pêche et on joue ensemble pendant un bon moment.",
     'next_chapter_id' => null,
     'impact_bonheur' => 3,
-    'impact_sante' => 1,
+    'impact_sante' => 2,
     'impact_energie' => 2,
 ]);
 
@@ -383,7 +383,7 @@ Choice::create([
     'chapter_id' => $chapter3_1->id,
     'content' => "Tu le sors faire une balade calme pour l’aider à se dépenser et découvrir le quartier.",
     'next_chapter_id' => $chapter3_2->id,
-    'impact_bonheur' => 2,
+    'impact_bonheur' => 3,
     'impact_sante' => 2,
     'impact_energie' => 2,
 ]);
@@ -403,7 +403,7 @@ Choice::create([
     'content' => "Je le laisse dormir près de moi pour le rassurer.",
     'next_chapter_id' => $chapter3_3->id,
     'impact_bonheur' => 3,
-    'impact_sante' => 1,
+    'impact_sante' => 2,
     'impact_energie' => 1,
 ]);
 
@@ -440,9 +440,9 @@ Choice::create([
     'chapter_id' => $chapter3_4->id,
     'content' => "Je le rassure en le caressant et en lui parlant doucement.",
     'next_chapter_id' => $chapter3_5->id,
-    'impact_bonheur' => 2,
-    'impact_sante' => 2,
-    'impact_energie' => 0,
+    'impact_bonheur' => 1,
+    'impact_sante' => 3,
+    'impact_energie' => 1,
 ]);
 
 Choice::create([
@@ -478,7 +478,7 @@ Choice::create([
     'chapter_id' => $chapter3_6->id,
     'content' => "Je surveille de loin et le laisse socialiser librement.",
     'next_chapter_id' => null,
-    'impact_bonheur' => 2,
+    'impact_bonheur' => 3,
     'impact_sante' => 1,
     'impact_energie' => 2,
 ]);

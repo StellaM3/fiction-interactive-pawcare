@@ -22,7 +22,7 @@ import ChapterView from './ChapterView.vue'
 const stories = ref([])
 const currentStory = ref(null)
 const currentChapter = ref(null)
-
+const userChoices = ref([]) // Add this line to define userChoices ref
 /* ---------------------------------------------------- */
 /* computed property pour gérer l'affichage              */
 /* ---------------------------------------------------- */
@@ -69,6 +69,7 @@ async function startStory(story) {
     })
   }
 
+  userChoices.value = [] // NEW Reset choices when starting new story
   currentStory.value = story
   currentChapter.value = story.chapters[0]
 }
@@ -86,6 +87,14 @@ async function selectChoice(choice) {
     },
     credentials: 'same-origin',
     body: JSON.stringify({ choice_id: choice.id, user_id: 1 })
+  })
+
+  // Add the choice to userChoices 13h08
+  userChoices.value.push({
+    id: choice.id,
+    impact_bonheur: parseInt(choice.impact_bonheur || 0),
+    impact_sante: parseInt(choice.impact_sante || 0),
+    impact_energie: parseInt(choice.impact_energie || 0)
   })
 
   if (!choice.next_chapter_id) {
@@ -115,16 +124,20 @@ async function selectChoice(choice) {
 /* fonction pour calculer les scores et choisir la fin   */
 /* ---------------------------------------------------- */
 function determineEnding() {
-  const userChoices = currentStory.value.chapters
-    .flatMap(chapter => chapter.choices)
-    .filter(choice => choice.selected)
+  //const userChoices = currentStory.value.chapters
+    //.flatMap(chapter => chapter.choices)
+    //.filter(choice => choice.selected)
 
-  const totalScores = userChoices.reduce((acc, choice) => {
-    acc.bonheur += choice.impact_bonheur || 0
-    acc.sante += choice.impact_sante || 0
-    acc.energie += choice.impact_energie || 0
+  const totalScores = userChoices.value.reduce((acc, choice) => {
+    acc.bonheur += parseInt(choice.impact_bonheur || 0) 
+    acc.sante += parseInt(choice.impact_sante || 0) 
+    acc.energie += parseInt(choice.impact_energie || 0) 
     return acc
   }, { bonheur: 0, sante: 0, energie: 0 })
+
+  console.log('Choices array:', userChoices.value) // 🟢 ADD: Debug log
+  console.log('Choices made:', userChoices.value.length)
+  console.log('Total scores:', totalScores); // Debug scores
 
   const thresholds = {
     bonheur: 5,
@@ -132,20 +145,30 @@ function determineEnding() {
     energie: 2
   }
 
+  // Determine if scores meet thresholds for happy ending
   const isHappyEnding = totalScores.bonheur >= thresholds.bonheur &&
                        totalScores.sante >= thresholds.sante &&
                        totalScores.energie >= thresholds.energie
 
-  const endings = currentStory.value.chapters.filter(chapter => 
+ const endings = currentStory.value.chapters.filter(chapter => 
     chapter.title?.includes('belle harmonie') || 
     chapter.title?.includes('débuts difficiles') ||
     chapter.title?.includes('duo inséparable') ||
-    chapter.title?.includes('défis à surmonter')
-  )
+    chapter.title?.includes('défis à surmonter'));
+  
 
-  return isHappyEnding 
+
+  const selectedEnding = isHappyEnding
     ? endings.find(chapter => chapter.title?.includes('harmonie') || chapter.title?.includes('duo'))
     : endings.find(chapter => chapter.title?.includes('difficiles') || chapter.title?.includes('défis'))
+
+    // Reset choices for next story
+    //if (endings.length) {
+    //userChoices.value = []
+  //}
+
+  
+    return selectedEnding 
 }
 </script>
   
