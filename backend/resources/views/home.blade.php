@@ -8,6 +8,19 @@
     @vite('resources/js/app.js') <!-- 🔥 super important -->
 </head>
 <body>
+    <header>
+    <nav>
+    @if(Session::has('user_id'))
+            <form method="POST" action="{{ url('/logout') }}">
+                @csrf
+                <button type="submit" class="logout-button">Se déconnecter</button>
+            </form>
+        @else
+            <a href="{{ url('/login') }}" class="login-link">Se connecter</a>
+            <a href="{{ url('/create') }}"> créer une histoire</a>
+        @endif
+    </nav>
+    </header>
     <div id="app">
         <stories-list></stories-list>
     </div>

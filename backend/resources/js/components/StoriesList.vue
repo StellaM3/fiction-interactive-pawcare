@@ -36,6 +36,29 @@ const getDisplayedChapter = computed(() => {
   
   return currentChapter.value
 })
+
+
+
+async function checkAuth() {
+    try {
+        const response = await fetch('/api/v1/check', {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            },
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            window.location.href = '/login';
+        }
+    } catch (e) {
+        console.error('Auth check failed:', e);
+        window.location.href = '/login';
+    }
+}
+
+
   
 /* ---------------------------------------------------- */
 /* chargement initial : toutes les histoires            */

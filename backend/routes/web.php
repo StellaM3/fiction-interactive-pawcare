@@ -7,12 +7,15 @@ use App\Http\Controllers\Api\{
     ChapterController,
     ChoiceController,
     StoryResultController,
-    UserChoiceController
+    UserChoiceController,
+    AuthController,
+   
 };
+use App\Http\Controllers\CreateStoryController;
 use App\Models\UserChoice;
 
 /* ---------- API ---------- */
-Route::get ('/api/stories',                [StoryController::class,      'index']);
+//Route::get ('/api/stories',                [StoryController::class,      'index']);
 Route::get ('/api/chapters',               [ChapterController::class,    'index']);
 Route::get ('/api/chapters/{id}',          [ChapterController::class,    'show']);
 Route::get ('/api/choices',                [ChoiceController::class,     'index']);
@@ -38,3 +41,18 @@ Route::get ('/api/choices',                [ChoiceController::class,     'index'
 
 /* ---------- Page SPA ---------- */
 Route::get('/', fn () => view('home'));
+Route::get('/login', [AuthController::class, 'getAuthenticateForm']);
+//Route::post('/login', [AuthController::class, 'login']);
+Route::post('/authenticate', [AuthController::class, 'authenticate']);
+// Routes protégées (nécessitant authentification)
+Route::post('/logout', [AuthController::class, 'logout']);
+
+Route::get('/create', [CreateStoryController::class, 'create']);
+Route::middleware('auth:web')->group(function () {
+   
+  });
+// Routes admin (nécessitant authentification + rôle admin)
+Route::middleware(['auth:web', 'api.access'])->group(function () {
+    Route::get('admin', [StoryController::class, 'store']);
+    
+});
