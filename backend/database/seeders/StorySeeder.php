@@ -89,12 +89,7 @@ $chapter6 = Chapter::create([
             'score_type' => null,
         ]);
         
-        Choice::create([
-            'chapter_id' => $chapter1->id,
-            'content' => 'Non, je préfère attendre encore un peu.',
-            'next_chapter_id' => null,
-            'score_type' => null,
-        ]);
+    
         
         // Chapitre 2
         Choice::create([

@@ -33,6 +33,7 @@
   </script>
   
   <style scoped>
+
   /* Structure générale */
   /* wrapper centré */
   .chapter-wrapper {

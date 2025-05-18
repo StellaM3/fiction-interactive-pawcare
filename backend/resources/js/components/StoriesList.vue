@@ -8,21 +8,27 @@
   - Le calcul des fins alternatives
 -->
 <template>
-    <div>
-      <!-- Affiche le chapitre courant via ChapterView-->
-      <ChapterView
-        v-if="currentChapter"
-        :chapter="getDisplayedChapter"
-        @choice-selected="selectChoice"
-      />
-      <!-- Sinon, simple loader -->
-      <p v-else>Chargement…</p>
+     <div class="story-container">
+        <ScoreGauges 
+         v-if="currentChapter && [2, 3].includes(currentStory?.id)"
+         :scores="currentScores"
+        />
+        <div class="chapter-card">
+            <ChapterView
+             v-if="currentChapter"
+             :chapter="getDisplayedChapter"
+             @choice-selected="selectChoice"
+            />
+            <p v-else>Chargement…</p>
+        </div>
     </div>
 </template>
   
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import ChapterView from './ChapterView.vue'
+import ScoreGauges from './ScoreGauges.vue'
+
   
 /* ---------------------------------------------------- */
 /* State réactif pour suivre l'état du jeu               */
@@ -215,14 +221,49 @@ function determineEnding() {
 
   
     return selectedEnding 
+
 }
+
+// Ajout du computed pour les scores actuels
+const currentScores = computed(() => {
+  return userChoices.value.reduce((acc, choice) => {
+    acc.bonheur += parseInt(choice.impact_bonheur || 0)
+    acc.sante += parseInt(choice.impact_sante || 0)
+    acc.energie += parseInt(choice.impact_energie || 0)
+    return acc
+  }, { bonheur: 0, sante: 0, energie: 0 })
+})
 </script>
 
+
+
 <style scoped>
-.chapter-card {
-  border: 1px solid #ccc;
+.story-container {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+
+
+:deep(.chapter-content) {
+  font-size: 1.2rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.8;
+  margin: 2rem auto;
+  max-width: 650px;
+  color: #2c3e50;
+}
+
+:deep(.choices-container) {
+  max-width: 650px;
+  margin: 2rem auto;
+}
+
+:deep(.choice-button) {
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
   padding: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 8px;
 }
 </style>
